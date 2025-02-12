@@ -1,6 +1,6 @@
 @MyAcademy.Identity_HostAddress = http://localhost:5024
 
-GET {{MyAcademy.Identity_HostAddress}}/weatherforecast/
+POST {{MyAcademy.Identity_HostAddress}}/login
 Accept: application/json
 
 ###

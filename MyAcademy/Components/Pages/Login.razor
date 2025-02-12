@@ -1,0 +1,49 @@
+@page "/login"
+@using MyAcademy.Services
+@inject AuthService AuthService
+@inject NavigationManager Navigation
+
+<h3>Connexion</h3>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p class="text-danger">@errorMessage</p>
+}
+
+<EditForm Model="loginModel" OnSubmit="HandleLogin" FormName="loginForm">
+    <DataAnnotationsValidator />
+    
+    <div>
+        <label>Email</label>
+        <InputText @bind-Value="loginModel.Email" />
+    </div>
+
+    <div>
+        <label>Mot de passe</label>
+        <InputText type="password" @bind-Value="loginModel.Password" />
+    </div>
+
+    <button type="submit">Se connecter</button>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    private LoginModel? loginModel { get; set; } = new LoginModel();
+    
+    private string? errorMessage;
+
+    private async Task HandleLogin()
+    {
+        var success = await AuthService.Login(loginModel.Email, loginModel.Password);
+        if (success)
+            Navigation.NavigateTo("/");
+        else
+            errorMessage = "Email ou mot de passe incorrect.";
+    }
+
+    private class LoginModel
+    {
+        public string Email { get; set; } = "";
+        public string Password { get; set; } = "";
+    }
+}
