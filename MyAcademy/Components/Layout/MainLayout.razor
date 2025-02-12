@@ -1,4 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿@using MyAcademy.Services
+@inherits LayoutComponentBase
+@inject AuthService AuthService
+@inject NavigationManager Navigation
 
 <div class="page">
     <div class="sidebar">
@@ -6,6 +9,17 @@
     </div>
 
     <main>
+        @if ((AuthService.GetAuthenticationStateAsync()).Result. User.Identity.IsAuthenticated)
+        {
+            <p>Bienvenue, @(AuthService.GetAuthenticationStateAsync()).User.Identity.Name</p>
+            <button @onclick="HandleLogout">Déconnexion</button>
+        }
+        else
+        {
+            <NavLink href="/login">Connexion</NavLink>
+        }
+        
+        
         <div class="top-row px-4">
             <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
         </div>
@@ -21,3 +35,11 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code {
+    private void HandleLogout()
+    {
+        AuthService.Logout();
+        Navigation.NavigateTo("/");
+    }
+}

@@ -41,6 +41,9 @@ public class AuthService : AuthenticationStateProvider
 
     public void Logout()
     {
+        // appel de l'action de déconnexion
+        _httpClient.PostAsync("https://localhost:7018/logout", null);
+        
         _user = new ClaimsPrincipal(new ClaimsIdentity());
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_user)));
     }
