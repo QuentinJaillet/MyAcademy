@@ -9,15 +9,14 @@
     </div>
 
     <main>
-        @if ((AuthService.GetAuthenticationStateAsync()).Result. User.Identity.IsAuthenticated)
-        {
-            <p>Bienvenue, @(AuthService.GetAuthenticationStateAsync()).User.Identity.Name</p>
-            <button @onclick="HandleLogout">Déconnexion</button>
-        }
-        else
-        {
-            <NavLink href="/login">Connexion</NavLink>
-        }
+        <AuthorizeView>
+            <Authorized>
+                <button @onclick="Logout">Se déconnecter</button>
+            </Authorized>
+            <NotAuthorized>
+                <NavLink href="/login">Se connecter</NavLink>
+            </NotAuthorized>
+        </AuthorizeView>
         
         
         <div class="top-row px-4">
@@ -37,9 +36,9 @@
 </div>
 
 @code {
-    private void HandleLogout()
+    private async Task Logout()
     {
-        AuthService.Logout();
+        await AuthService.Logout();
         Navigation.NavigateTo("/");
     }
 }

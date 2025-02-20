@@ -1,6 +1,7 @@
 using System.Text;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -81,6 +82,7 @@ app.MapPost("/register", async (IMediator mediator, Register register) =>
 {
     var command = new RegisterCommand(register.Email, register.Password);
     var response = await mediator.Send(command);
+    return response ? Results.NoContent() : Results.BadRequest();
 }).WithName("Register");
 
 app.MapGet("/me", async (IMediator mediator) =>

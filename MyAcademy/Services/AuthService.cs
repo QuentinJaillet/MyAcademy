@@ -1,24 +1,24 @@
-using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace MyAcademy.Services;
 
-public class AuthService : AuthenticationStateProvider
+public class AuthService
 {
     private readonly HttpClient _httpClient;
-    private ClaimsPrincipal _user = new(new ClaimsIdentity());
+    private readonly ProtectedSessionStorage _protectedSessionStorage;
+    private readonly AuthenticationStateProvider _authStateProvider;
+    private string? _token;
 
-    public AuthService(HttpClient httpClient)
+    public AuthService(HttpClient httpClient, ProtectedSessionStorage protectedSessionStorage, AuthenticationStateProvider authStateProvider)
     {
         _httpClient = httpClient;
+        _protectedSessionStorage = protectedSessionStorage;
+        _authStateProvider = authStateProvider;
     }
 
-    public override Task<AuthenticationState> GetAuthenticationStateAsync()
-    {
-        return Task.FromResult(new AuthenticationState(_user));
-    }
-    
     public async Task<bool> Login(string email, string password)
     {
         var response = await _httpClient.PostAsJsonAsync("https://localhost:7018/login", new { email, password });
@@ -30,22 +30,35 @@ public class AuthService : AuthenticationStateProvider
         if (result == null || string.IsNullOrEmpty(result))
             return false;
 
-        var handler = new JwtSecurityTokenHandler();
-        var token = handler.ReadJwtToken(result);
-        var identity = new ClaimsIdentity(token.Claims, "jwt");
-        _user = new ClaimsPrincipal(identity);
+        // Stocker le token dans Protected Session Storage
+        await _protectedSessionStorage.SetAsync("authToken", _token);
 
-        NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_user)));
+        // Configurer HttpClient pour les appels futurs
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+        // Notifier Blazor de l'état de connexion
+        await ((CustomAuthStateProvider)_authStateProvider).NotifyUserAuthentication(_token);
         return true;
     }
 
-    public void Logout()
+    public async Task Register(string email, string password)
+    {
+       var response =  await _httpClient.PostAsJsonAsync("https://localhost:7018/register", new { email, password });
+
+         if (!response.IsSuccessStatusCode)
+              throw new Exception("Erreur lors de l'inscription");
+    }
+
+    public async Task Logout()
     {
         // appel de l'action de déconnexion
-        _httpClient.PostAsync("https://localhost:7018/logout", null);
-        
-        _user = new ClaimsPrincipal(new ClaimsIdentity());
-        NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_user)));
+        await _httpClient.PostAsync("https://localhost:7018/logout", null);
+
+        _token = null;
+        await _protectedSessionStorage.DeleteAsync("authToken");
+
+        _httpClient.DefaultRequestHeaders.Authorization = null;
+         await ((CustomAuthStateProvider)_authStateProvider).NotifyUserLogout();
     }
 
     private class LoginResponse

@@ -9,7 +9,8 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https:/
 
 // Ajouter le service d’authentification
 builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<AuthService>());
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+//builder.Services.AddProtectedSessionStorage();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

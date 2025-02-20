@@ -1,0 +1,21 @@
+@page "/Register"
+
+<h3>Register</h3>
+
+<EditForm Model="Model" OnValidSubmit="Submit" FormName="Register-Form">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <label>
+        Email : 
+        <InputText type="" @bind-Value="Model!.Email" />
+    </label>
+    <label>
+        Password : 
+        <InputText type="password" @bind-Value="Model!.Password" />
+    </label>
+    <label>
+        Confirm Password : 
+        <InputText type="password" @bind-Value="Model!.ConfirmPassword" />
+    </label>
+    <button type="submit">Submit</button>
+</EditForm>
