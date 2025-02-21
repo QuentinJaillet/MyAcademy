@@ -12,17 +12,17 @@ public class GetSummaryCourses : IRequestHandler<GetSummaryCoursesQuery, IReadOn
         {
             new SummaryCours
             {
-                Id = Guid.NewGuid(), Name = "Course 1", Description = "Description 1",
+                Id = Guid.NewGuid(), Title = "Course 1", Description = "Description 1",
                 ImageUrl = "https://via.placeholder.com/150"
             },
             new SummaryCours
             {
-                Id = Guid.NewGuid(), Name = "Course 2", Description = "Description 2",
+                Id = Guid.NewGuid(), Title = "Course 2", Description = "Description 2",
                 ImageUrl = "https://via.placeholder.com/150"
             },
             new SummaryCours
             {
-                Id = Guid.NewGuid(), Name = "Course 3", Description = "Description 3",
+                Id = Guid.NewGuid(), Title = "Course 3", Description = "Description 3",
                 ImageUrl = "https://via.placeholder.com/150"
             }
         };

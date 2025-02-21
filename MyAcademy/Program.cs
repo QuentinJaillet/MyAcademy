@@ -12,6 +12,11 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 //builder.Services.AddProtectedSessionStorage();
 
+builder.Services.AddHttpClient<CourseService>(options =>
+{
+    options.BaseAddress = new Uri("https://localhost:7294");
+});
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

@@ -26,11 +26,11 @@ app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.MapGet("/summary", async (IMediator mediator) =>
+app.MapGet("/summaries", async (IMediator mediator) =>
 {
     var query = new GetSummaryCoursesQuery();
     var response = await mediator.Send(query);
     return Results.Ok(response);
-}).WithName("Summary").AllowAnonymous();
+}).WithName("Summaries").AllowAnonymous();
 
 app.Run();
