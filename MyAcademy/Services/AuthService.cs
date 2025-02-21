@@ -29,8 +29,10 @@ public class AuthService
         if (result == null || string.IsNullOrEmpty(result))
             return false;
 
+        _token = result;
+        
         // Stocker le token dans Protected Session Storage
-        await _protectedSessionStorage.SetAsync("authToken", _token);
+        //await _protectedSessionStorage.SetAsync("authToken", _token);
 
         // Configurer HttpClient pour les appels futurs
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
