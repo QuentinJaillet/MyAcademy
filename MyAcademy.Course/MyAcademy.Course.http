@@ -1,0 +1,6 @@
+@MyAcademy.Course_HostAddress = http://localhost:5159
+
+GET {{MyAcademy.Course_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
