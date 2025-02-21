@@ -1,7 +1,13 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MyAcademy.Course.Application.Queries;
+using MyAcademy.Course.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Ajout d'Entity Framework avec Identity
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Ajout de MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
@@ -14,6 +20,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Migration automatique au démarrage
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.EnsureCreated(); // Crée la DB si elle n'existe pas
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
