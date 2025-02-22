@@ -1,12 +1,9 @@
-namespace MyAcademy.Course.Domain;
+namespace MyAcademy.Course.Application.DTOs;
 
-public class SummaryCours
+public class SummaryDto
 {
     public Guid Id { get; set; }
-    
     public string Title { get; set; }
-    
     public string Description { get; set; }
-    
     public string ImageUrl { get; set; }
 }

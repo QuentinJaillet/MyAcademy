@@ -1,4 +1,4 @@
-namespace MyAcademy.Course.Infrastructure.Entities;
+namespace MyAcademy.Course.Domain;
 
 public class Lesson
 {

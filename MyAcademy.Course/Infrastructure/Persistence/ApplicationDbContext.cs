@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using MyAcademy.Course.Infrastructure.Entities;
+using MyAcademy.Course.Domain;
 
-namespace MyAcademy.Course.Infrastructure;
+namespace MyAcademy.Course.Infrastructure.Persistence;
 
 public class ApplicationDbContext : DbContext
 {
-    public DbSet<Entities.Course> Courses { get; set; }
+    public DbSet<Domain.Course> Courses { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<User> Users { get; set; }

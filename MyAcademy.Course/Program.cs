@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyAcademy.Course.Application.Queries;
 using MyAcademy.Course.Infrastructure;
+using MyAcademy.Course.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,5 +46,12 @@ app.MapGet("/summaries", async (IMediator mediator) =>
     var response = await mediator.Send(query);
     return Results.Ok(response);
 }).WithName("Summaries").AllowAnonymous();
+
+app.MapGet("/courses/{id}", async (IMediator mediator, Guid id) =>
+{
+    var query = new GetCourseQuery(id);
+    var response = await mediator.Send(query);
+    return response is not null ? Results.Ok(response) : Results.NotFound();
+}).WithName("Course").AllowAnonymous();
 
 app.Run();

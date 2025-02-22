@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 namespace MyAcademy.Services;
 
 public class CourseService
