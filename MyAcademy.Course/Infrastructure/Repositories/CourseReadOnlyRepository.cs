@@ -59,4 +59,49 @@ public class CourseReadOnlyRepository : ICourseReadOnlyRepository
             .FirstOrDefaultAsync()
             .ConfigureAwait(false);
     }
+
+    public async Task<IEnumerable<Domain.Course>> GetFullCourses()
+    {
+        return await _dbContext.Courses
+            .AsNoTracking()
+            .Select(s => new Domain.Course
+            {
+                Id = s.Id,
+                Title = s.Title,
+                Subtitle = s.Subtitle,
+                Description = s.Description,
+                ImageUrl = s.ImageUrl,
+                CreatedAt = s.CreatedAt,
+                UpdatedAt = s.UpdatedAt,
+                Creator = new User
+                {
+                    Id = s.Creator.Id,
+                    FullName = s.Creator.FullName
+                },
+                Category = new Category
+                {
+                    Id = s.Category.Id,
+                    Name = s.Category.Name
+                },
+                Chapters = s.Chapters.Select(c => new Chapter
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    Order = c.Order,
+                    Lessons = c.Lessons.Select(l => new Lesson
+                    {
+                        Id = l.Id,
+                        Title = l.Title,
+                        VideoUrl = l.VideoUrl,
+                        Order = l.Order
+                    }).ToList()
+                }).ToList(),
+                Tags = s.Tags.Select(t => new Domain.Tag
+                {
+                    Id = t.Id,
+                    Name = t.Name
+                }).ToList(),
+            })
+            .ToListAsync();
+    }
 }

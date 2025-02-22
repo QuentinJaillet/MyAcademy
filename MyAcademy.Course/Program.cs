@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyAcademy.Course.Application.Queries;
-using MyAcademy.Course.Infrastructure;
 using MyAcademy.Course.Infrastructure.Persistence;
+using MyAcademy.Course.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +19,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<ICourseReadOnlyRepository, CourseReadOnlyRepository>();
 
 var app = builder.Build();
 
@@ -42,7 +43,7 @@ app.UseSwaggerUI();
 
 app.MapGet("/summaries", async (IMediator mediator) =>
 {
-    var query = new GetSummaryCoursesQuery();
+    var query = new GetSummariesQuery();
     var response = await mediator.Send(query);
     return Results.Ok(response);
 }).WithName("Summaries").AllowAnonymous();
