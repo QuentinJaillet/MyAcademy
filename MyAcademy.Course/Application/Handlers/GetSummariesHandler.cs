@@ -27,7 +27,8 @@ public class GetSummariesHandler : IRequestHandler<GetSummariesQuery, IReadOnlyL
             Id = course.Id,
             Title = course.Title,
             Description = course.Description,
-            ImageUrl = course.ImageUrl
+            ImageUrl = course.ImageUrl,
+            Creator = course.Creator.FullName
         }).ToList();
     }
 }
