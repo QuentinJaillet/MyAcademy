@@ -5,11 +5,12 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using MyAcademy.Identity.Application.Commands;
+using MyAcademy.Identity.Application.DTOs;
 using MyAcademy.Identity.Infrastructure.Entities;
 
 namespace MyAcademy.Identity.Application.Handlers;
 
-public class LoginHandler : IRequestHandler<LoginCommand, string>
+public class LoginHandler : IRequestHandler<LoginCommand, LoginResponse>
 {
     private readonly ILogger<LoginHandler> _logger;
     private readonly SignInManager<User> _signInManager;
@@ -22,10 +23,10 @@ public class LoginHandler : IRequestHandler<LoginCommand, string>
         _logger = logger;
     }
 
-    public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Logging in user with email {Email}", request.Email);
-        
+
         try
         {
             var result = await _signInManager
@@ -35,12 +36,12 @@ public class LoginHandler : IRequestHandler<LoginCommand, string>
             if (result.Succeeded)
             {
                 _logger.LogInformation("User with email {Email} logged in", request.Email);
-                
+
                 var user = await _userManager.FindByNameAsync(request.Email).ConfigureAwait(false);
                 var token = GenerateJwtToken(user);
-                return token;
+                return new LoginResponse(token, user.Id);
             }
-            
+
             _logger.LogWarning("Failed to log in user with email {Email}", request.Email);
         }
         catch (Exception e)

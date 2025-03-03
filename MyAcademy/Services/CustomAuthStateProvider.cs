@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components.Authorization;
-using MyAcademy.Services;
+
+namespace MyAcademy.Services;
 
 public class CustomAuthStateProvider : AuthenticationStateProvider
 {
@@ -16,6 +17,7 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
         }, "serverAuth");
 
         _user = new ClaimsPrincipal(identity);
+        
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_user)));
     }
 

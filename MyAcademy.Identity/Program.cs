@@ -9,6 +9,7 @@ using MyAcademy.Identity.Application.Queries;
 using MyAcademy.Identity.Domain;
 using MyAcademy.Identity.Infrastructure;
 using MyAcademy.Identity.Infrastructure.Entities;
+using MyAcademy.Identity.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,7 +75,7 @@ app.MapPost("/login", async (IMediator mediator, Login login) =>
 {
     var command = new LoginCommand(login.Email, login.Password);
     var response = await mediator.Send(command);
-    return Results.Ok(response);
+    return Results.Ok(new LoginResponse(response.Token, response.UserId));
 }).WithName("Login");
 
 app.MapPost("/register", async (IMediator mediator, Register register) =>
@@ -88,7 +89,7 @@ app.MapGet("/me", async (IMediator mediator) =>
 {
     var query = new MeQuery();
     var response = await mediator.Send(query);
-    return Results.Ok(response);
+    return Results.Ok(new UserInfoResponse(response.Id, response.Email, "User"));
 }).WithName("Me").RequireAuthorization();
 
 app.MapPost("/logout", async (IMediator mediator) =>

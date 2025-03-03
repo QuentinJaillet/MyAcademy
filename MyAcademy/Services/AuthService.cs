@@ -15,12 +15,12 @@ public class AuthService
 
     public async Task<bool> Login(string email, string password)
     {
-        var response = await _httpClient.PostAsJsonAsync("https://localhost:7001/login", new { email, password });
+        var response = await _httpClient.PostAsJsonAsync("https://localhost:7084/login", new { email, password });
 
         if (!response.IsSuccessStatusCode)
             return false;
         
-        var user = await _httpClient.GetFromJsonAsync<UserInfoResponse>("https://localhost:7001/me");
+        var user = await _httpClient.GetFromJsonAsync<UserInfoResponse>("https://localhost:7084/me");
 
         await ((CustomAuthStateProvider)_authStateProvider).NotifyUserAuthentication(user);
         return true;
@@ -28,7 +28,7 @@ public class AuthService
 
     public async Task Logout()
     {
-        await _httpClient.PostAsync("https://localhost:7001/logout", null);
+        await _httpClient.PostAsync("https://localhost:7084/logout", null);
         ((CustomAuthStateProvider)_authStateProvider).NotifyUserLogout();
     }
 }

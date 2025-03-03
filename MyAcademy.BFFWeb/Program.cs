@@ -1,8 +1,5 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.AspNetCore.Mvc;
+using MyAcademy.BFFWeb.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,45 +44,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-/// 🔐 **Endpoint de login (vérifie et stocke le JWT)**
-app.MapPost("/login", async (IHttpClientFactory httpClientFactory, HttpContext httpContext, [FromBody] LoginRequest request) =>
-{
-    var httpClient = httpClientFactory.CreateClient("AuthApi");
-    var response = await httpClient.PostAsJsonAsync("login", request);
-
-    if (!response.IsSuccessStatusCode)
-        return Results.Unauthorized();
-
-    var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
-    if (result == null || string.IsNullOrEmpty(result.Token))
-        return Results.Unauthorized();
-
-    var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.NameIdentifier, result.UserId),
-        new Claim(ClaimTypes.Name, request.Email),
-        new Claim("Token", result.Token) // Stocker le token de manière sécurisée
-    };
-
-    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-    var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-    await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-
-    return Results.Ok();
-});
-
-/// 🚪 **Déconnexion**
-app.MapPost("/logout", async (HttpContext httpContext) =>
-{
-    await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-    return Results.Ok();
-});
-
-
+app.MapIdentityEndpoints();
+app.MapCoursesEndpoints();
 
 app.Run();
 
 public record LoginRequest(string Email, string Password);
+
 public record LoginResponse(string Token, string UserId);
+
 public record UserInfoResponse(string Id, string Email, string Role);
