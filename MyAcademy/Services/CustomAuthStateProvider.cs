@@ -1,45 +1,32 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-
-namespace MyAcademy.Services;
+using MyAcademy.Services;
 
 public class CustomAuthStateProvider : AuthenticationStateProvider
 {
-    private readonly ProtectedSessionStorage _protectedSessionStorage;
     private ClaimsPrincipal _user = new(new ClaimsIdentity());
-    
-    public async Task NotifyUserAuthentication(string token)
+
+    public async Task NotifyUserAuthentication(UserInfoResponse? user)
     {
-        var identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
+        var identity = new ClaimsIdentity(new[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.Name, user.Email),
+            new Claim(ClaimTypes.Role, user.Role)
+        }, "serverAuth");
+
         _user = new ClaimsPrincipal(identity);
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_user)));
     }
 
-    public async Task NotifyUserLogout()
+    public void NotifyUserLogout()
     {
         _user = new ClaimsPrincipal(new ClaimsIdentity());
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_user)));
     }
-    
-    public override async Task<AuthenticationState> GetAuthenticationStateAsync()
-    {
-        var result = await _protectedSessionStorage.GetAsync<string>("authToken");
-        if (!result.Success || string.IsNullOrEmpty(result.Value))
-        {
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
-        }
 
-        var identity = new ClaimsIdentity(ParseClaimsFromJwt(result.Value), "jwt");
-        var user = new ClaimsPrincipal(identity);
-
-        return new AuthenticationState(user);
-    }
-    
-    private IEnumerable<Claim> ParseClaimsFromJwt(string token)
+    public override Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-        var jwt = handler.ReadJwtToken(token);
-        return jwt.Claims;
+        return Task.FromResult(new AuthenticationState(_user));
     }
 }

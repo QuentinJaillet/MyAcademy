@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using MyAcademy.Course.Application.Queries;
 using MyAcademy.Course.Infrastructure.Persistence;
 using MyAcademy.Course.Infrastructure.Repositories;
+using MyAcademy.Course.Mappers;
+using MyAcademy.Course.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +21,9 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICourseReadOnlyRepository, CourseReadOnlyRepository>();
+builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 
 var app = builder.Build();
 
@@ -54,5 +58,14 @@ app.MapGet("/courses/{id}", async (IMediator mediator, Guid id) =>
     var response = await mediator.Send(query);
     return response is not null ? Results.Ok(response) : Results.NotFound();
 }).WithName("Course").AllowAnonymous();
+
+// Ajout d'un cours 
+app.MapPost("/courses", async (IMediator mediator, CreateCourseRequest request) =>
+    {
+        var response = await mediator.Send(request.ToCommand());
+        return Results.Created($"/courses/{response}", response);
+    })
+    .WithName("CreateCourse")
+    .RequireAuthorization();
 
 app.Run();

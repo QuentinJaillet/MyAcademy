@@ -22,8 +22,4 @@
       </Content>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Application\Commands\" />
-    </ItemGroup>
-
 </Project>

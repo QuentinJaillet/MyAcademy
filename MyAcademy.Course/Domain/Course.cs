@@ -9,7 +9,9 @@ public class Course
     public string ImageUrl { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    public Guid CreatorId { get; set; }
     public User Creator { get; set; }
+    public Guid CategoryId { get; set; }
     public Category Category { get; set; }
     public ICollection<Tag> Tags { get; set; }
     public ICollection<Chapter> Chapters { get; set; }

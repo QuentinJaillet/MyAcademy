@@ -17,6 +17,6 @@ public partial class Register : ComponentBase
     {
         Console.WriteLine("Submit");
 
-        await AuthService.Register(Model.Email, Model.Password);
+        //await AuthService.Register(Model.Email, Model.Password);
     }
 }
