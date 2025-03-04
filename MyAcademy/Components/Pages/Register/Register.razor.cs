@@ -7,11 +7,9 @@ namespace MyAcademy.Components.Pages.Register;
 
 public partial class Register : ComponentBase
 {
-    [Inject]
-    public AuthService AuthService { get; set; }
-    
-    [SupplyParameterFromForm] 
-    private RegisterModel? Model { get; set; } = new();
+    [Inject] public AuthService AuthService { get; set; }
+
+    [SupplyParameterFromForm] private RegisterModel? Model { get; set; } = new();
 
     private async Task Submit(EditContext arg)
     {

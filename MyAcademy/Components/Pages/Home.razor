@@ -1,29 +1,58 @@
 ﻿@page "/"
-@using Microsoft.AspNetCore.Components.Authorization
+
+@code {
+
+    private void Callback1()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void Callback2()
+    {
+        throw new NotImplementedException();
+    }
+
+}
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<div style="display: flex; justify-content: flex-start; flex-direction: row">
+    <div class="card">
+        <label>Search</label>
+        <input type="text" @bind="SearchTerm" @bind:event="oninput" placeholder="Rechercher..." class="form-control"/>
+        <br/>
+        <p>Categories</p>
+        @foreach (var category in CategoriesSelected)
+        {
+            <div class="form-check">
+                <input class="form-check-input" checked="@category.Value" type="checkbox" value=""
+                       id="cat-@category.Key.Name.ToLower()">
+                <label class="form-check-label" for="cat-@category.Key.Name.ToLower()">
+                    @category.Key.Name
+                </label>
+            </div>
+        }
+        <br/>
+        <p>Langues</p>
+        <p>toto</p>
+        <button type="button" @onclick="Callback2">Clik</button>
+    </div>
+    <div>
+        @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <p>@ErrorMessage</p>
+        }
+
+        @foreach (var course in Summaries)
+        {
+            <p>@course.Title</p>
+            <p>@course.Description</p>
+            <p>@course.Creator</p>
+            <img src="@course.ImageUrl" alt="@course.Title"/>
+        }
+    </div>
+</div>
 
 
-<AuthorizeView>
-    <Authorized>
-        This content is displayed only if the user is Authorized
-    </Authorized>
-    <NotAuthorized>
-        This content is displayed if the user is Not Authorized
-    </NotAuthorized>
-</AuthorizeView>
-@if (!string.IsNullOrEmpty(ErrorMessage))
-{
-    <p>@ErrorMessage</p>
-}
 
-@foreach(var course in Summaries)
-{
-    <p>@course.Title</p>
-    <p>@course.Description</p>
-    <p>@course.Creator</p>
-    <img src="@course.ImageUrl" alt="@course.Title" />
-}
 

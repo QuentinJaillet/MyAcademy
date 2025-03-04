@@ -18,7 +18,7 @@ public class GetCourseHandler : IRequestHandler<GetCourseQuery, Domain.Course>
     public async Task<Domain.Course> Handle(GetCourseQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Get Course by Id: {Id}", request.Id);
-        
+
         return await _courseReadOnlyRepository
             .GetFullCourse(request.Id)
             .ConfigureAwait(false);

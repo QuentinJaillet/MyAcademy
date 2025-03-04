@@ -23,6 +23,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICourseReadOnlyRepository, CourseReadOnlyRepository>();
+builder.Services.AddScoped<ICategoryReadOnlyRepository, CategoryReadOnlyRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 
 var app = builder.Build();
@@ -53,11 +54,13 @@ app.MapGet("/summaries", async (IMediator mediator) =>
 }).WithName("Summaries").AllowAnonymous();
 
 app.MapGet("/courses/{id}", async (IMediator mediator, Guid id) =>
-{
-    var query = new GetCourseQuery(id);
-    var response = await mediator.Send(query);
-    return response is not null ? Results.Ok(response) : Results.NotFound();
-}).WithName("Course").AllowAnonymous();
+    {
+        var query = new GetCourseQuery(id);
+        var response = await mediator.Send(query);
+        return response is not null ? Results.Ok(response) : Results.NotFound();
+    })
+    .WithName("Course")
+    .AllowAnonymous();
 
 // Ajout d'un cours 
 app.MapPost("/courses", async (IMediator mediator, CreateCourseRequest request) =>
@@ -67,5 +70,16 @@ app.MapPost("/courses", async (IMediator mediator, CreateCourseRequest request) 
     })
     .WithName("CreateCourse")
     .RequireAuthorization();
+
+app.MapGet("/categories", async (IMediator mediator) =>
+    {
+        var response = await mediator
+            .Send(new GetCategoriesQuery())
+            .ConfigureAwait(false);
+
+        return Results.Ok(response.ToModel());
+    })
+    .WithName("Categories")
+    .AllowAnonymous();
 
 app.Run();

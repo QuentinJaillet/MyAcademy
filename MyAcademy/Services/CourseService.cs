@@ -9,10 +9,10 @@ public class CourseService
         _httpClient = httpClient;
     }
     
-    public async Task<IEnumerable<CourseSummary>?> GetSummariesAsync()
+    public async Task<IEnumerable<CourseSummary>?> GetCoursesAsync()
     {
         var response = await _httpClient
-            .GetFromJsonAsync<IEnumerable<CourseSummary>>("summaries")
+            .GetFromJsonAsync<IEnumerable<CourseSummary>>("courses")
             .ConfigureAwait(false);
         
         return response;
