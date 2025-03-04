@@ -11,58 +11,64 @@ public static class IdentityEndpoints
     public static void MapIdentityEndpoints(this WebApplication app)
     {
         app.MapPost("/login",
-            async (IHttpClientFactory httpClientFactory, HttpContext httpContext, [FromBody] LoginRequest request) =>
-            {
-                var httpClient = httpClientFactory.CreateClient("AuthApi");
-                var response = await httpClient.PostAsJsonAsync("login", request);
+                async (IHttpClientFactory httpClientFactory, HttpContext httpContext,
+                    [FromBody] LoginRequest request) =>
+                {
+                    var httpClient = httpClientFactory.CreateClient("AuthApi");
+                    var response = await httpClient.PostAsJsonAsync("login", request);
 
+                    if (!response.IsSuccessStatusCode)
+                        return Results.Unauthorized();
+
+                    var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
+                    if (result == null || string.IsNullOrEmpty(result.Token))
+                        return Results.Unauthorized();
+
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, result.UserId),
+                        new Claim(ClaimTypes.Name, request.Email),
+                        new Claim("Token", result.Token) // Stocker le token de manière sécurisée
+                    };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+                    await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+
+                    return Results.Ok();
+                })
+            .WithName("Login")
+            .AllowAnonymous();
+
+        app.MapPost("/logout", async (HttpContext httpContext) =>
+            {
+                await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                return Results.Ok();
+            })
+            .WithName("Logout");
+
+        app.MapGet("/me", async (IHttpClientFactory httpClientFactory, HttpContext httpContext, HttpClient client) =>
+            {
+                var user = httpContext.User;
+                if (user.Identity is not { IsAuthenticated: true })
+                    return Results.Unauthorized();
+
+                var token = user.FindFirst("Token")?.Value;
+                if (string.IsNullOrEmpty(token))
+                    return Results.Unauthorized();
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                var httpClient = httpClientFactory.CreateClient("AuthApi");
+                var response = await httpClient.GetAsync("me"); // Appel à l'API Identity
                 if (!response.IsSuccessStatusCode)
                     return Results.Unauthorized();
 
-                var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
-                if (result == null || string.IsNullOrEmpty(result.Token))
-                    return Results.Unauthorized();
-
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.NameIdentifier, result.UserId),
-                    new Claim(ClaimTypes.Name, request.Email),
-                    new Claim("Token", result.Token) // Stocker le token de manière sécurisée
-                };
-
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-                await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-
-                return Results.Ok();
-            });
-
-        app.MapPost("/logout", async (HttpContext httpContext) =>
-        {
-            await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Results.Ok();
-        });
-
-        app.MapGet("/me", async (IHttpClientFactory httpClientFactory, HttpContext httpContext, HttpClient client) =>
-        {
-            var user = httpContext.User;
-            if (user.Identity is not { IsAuthenticated: true })
-                return Results.Unauthorized();
-
-            var token = user.FindFirst("Token")?.Value;
-            if (string.IsNullOrEmpty(token))
-                return Results.Unauthorized();
-
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            var httpClient = httpClientFactory.CreateClient("AuthApi");
-            var response = await httpClient.GetAsync("me"); // Appel à l'API Identity
-            if (!response.IsSuccessStatusCode)
-                return Results.Unauthorized();
-
-            var userInfo = await response.Content.ReadFromJsonAsync<UserInfoResponse>();
-            return Results.Ok(userInfo);
-        });
+                var userInfo = await response.Content.ReadFromJsonAsync<UserInfoResponse>();
+                return Results.Ok(userInfo);
+            })
+            .WithName("Me")
+            .RequireAuthorization();
     }
 }

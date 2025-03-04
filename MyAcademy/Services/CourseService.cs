@@ -1,3 +1,5 @@
+using MyAcademy.Models;
+
 namespace MyAcademy.Services;
 
 public class CourseService
@@ -8,13 +10,22 @@ public class CourseService
     {
         _httpClient = httpClient;
     }
-    
+
     public async Task<IEnumerable<CourseSummary>?> GetCoursesAsync()
     {
         var response = await _httpClient
             .GetFromJsonAsync<IEnumerable<CourseSummary>>("courses")
             .ConfigureAwait(false);
-        
+
+        return response;
+    }
+
+    public async Task<IEnumerable<Category>?> GetCategoriesAsync()
+    {
+        var response = await _httpClient
+            .GetFromJsonAsync<IEnumerable<Category>>("categories")
+            .ConfigureAwait(false);
+
         return response;
     }
 }

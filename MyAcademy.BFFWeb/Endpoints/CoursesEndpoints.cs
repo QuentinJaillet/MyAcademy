@@ -6,10 +6,8 @@ public static class CoursesEndpoints
     {
         var group = routes.MapGroup("/courses");
 
-        group.MapGet("/", () =>
-        {
-            return Results.Ok(new List<string> { "Alice", "Bob", "Charlie" });
-        });
+
+        group.MapGet("/", () => { return Results.Ok(new List<string> { "Alice", "Bob", "Charlie" }); });
 
         /*group.MapPost("/", (string name) =>
         {

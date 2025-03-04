@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using MyAcademy.Models;
 using MyAcademy.Services;
 
 namespace MyAcademy.Components.Pages;
@@ -13,27 +12,26 @@ public partial class Home
 
     public string ErrorMessage { get; set; } = string.Empty;
     public IEnumerable<CourseSummary> Summaries { get; set; } = [];
-
-    public IEnumerable<Category> Categories { get; set; } = [];
-    public Dictionary<Category, bool> CategoriesSelected { get; set; } = new Dictionary<Category, bool>();
+    public Dictionary<Models.Category, bool> CategoriesSelected { get; set; } = new Dictionary<Models.Category, bool>();
     public string SearchTerm { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Categories = new List<Category>
+        try
         {
-            new Category { Id = Guid.NewGuid(), Name = "Développement" },
-            new Category { Id = Guid.NewGuid(), Name = "Design" },
-            new Category { Id = Guid.NewGuid(), Name = "Marketing" },
-            new Category { Id = Guid.NewGuid(), Name = "Finance" },
-            new Category { Id = Guid.NewGuid(), Name = "Langues" },
-            new Category { Id = Guid.NewGuid(), Name = "Autres" }
-        };
+            var categories = await CourseService.GetCategoriesAsync().ConfigureAwait(false);
 
-        foreach (var category in Categories)
-        {
-            CategoriesSelected.Add(category, false);
+            foreach (var category in categories)
+            {
+                CategoriesSelected.Add(category, false);
+            }
         }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Error de chargement des catégories");
+            //ErrorMessage = "Une erreur est survenue lors du chargement des cours.";
+        }
+
 
         try
         {
@@ -50,7 +48,7 @@ public partial class Home
         }
         catch (Exception e)
         {
-            Logger.LogError(e, "error de chargement des cours");
+            Logger.LogError(e, "Error de chargement des cours");
             ErrorMessage = "Une erreur est survenue lors du chargement des cours.";
         }
     }
@@ -60,7 +58,7 @@ public partial class Home
         throw new NotImplementedException();
     }
 
-    private Task FilterByCategory(Category category)
+    private Task FilterByCategory(Models.Category category)
     {
         CategoriesSelected[category] = !CategoriesSelected[category];
 

@@ -30,7 +30,7 @@ builder.Services.AddHttpClient("AuthApi", client =>
 
 builder.Services.AddHttpClient("CourseApi", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:5002/"); // API des cours
+    client.BaseAddress = new Uri("https://localhost:7294/"); // API des cours
 });
 
 var app = builder.Build();
@@ -51,6 +51,7 @@ app.UseSwaggerUI();
 
 app.MapIdentityEndpoints();
 app.MapCoursesEndpoints();
+app.MapCategoriesEndpoints();
 
 app.Run();
 

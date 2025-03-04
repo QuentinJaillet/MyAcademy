@@ -30,12 +30,12 @@ builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>
 
 builder.Services.AddHttpClient<AuthService>(options =>
 {
-    options.BaseAddress = new Uri("https://localhost:7018");
+    options.BaseAddress = new Uri("https://localhost:7084");
 });
 
 builder.Services.AddHttpClient<CourseService>(options =>
 {
-    options.BaseAddress = new Uri("https://localhost:7294");
+    options.BaseAddress = new Uri("https://localhost:7084");
 });
 
 // Add services to the container.
