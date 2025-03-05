@@ -1,3 +1,5 @@
+using MyAcademy.BFFWeb.Models;
+
 namespace MyAcademy.BFFWeb.Endpoints;
 
 public static class CoursesEndpoints
@@ -6,8 +8,28 @@ public static class CoursesEndpoints
     {
         var group = routes.MapGroup("/courses");
 
+        group.MapGet("/", async (ILogger<Program> logger, IHttpClientFactory httpClientFactory) =>
+        {
+            logger.LogInformation("Get courses");
 
-        group.MapGet("/", () => { return Results.Ok(new List<string> { "Alice", "Bob", "Charlie" }); });
+            var httpClient = httpClientFactory.CreateClient("CourseApi");
+
+            try
+            {
+                var courses = await httpClient
+                    .GetFromJsonAsync<IEnumerable<Course>>("courses")
+                    .ConfigureAwait(false);
+
+                return Results.Ok(courses);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error when calling CourseApi");
+                return Results.Problem("Error when calling CourseApi",
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    type: "Error");
+            }
+        });
 
         /*group.MapPost("/", (string name) =>
         {

@@ -11,7 +11,7 @@ public partial class Home
     [Inject] public ILogger<Home> Logger { get; set; }
 
     public string ErrorMessage { get; set; } = string.Empty;
-    public IEnumerable<CourseSummary> Summaries { get; set; } = [];
+    public IEnumerable<Course> Summaries { get; set; } = [];
     public Dictionary<Models.Category, bool> CategoriesSelected { get; set; } = new Dictionary<Models.Category, bool>();
     public string SearchTerm { get; set; }
 

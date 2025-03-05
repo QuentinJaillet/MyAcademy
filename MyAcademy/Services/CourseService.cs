@@ -11,10 +11,10 @@ public class CourseService
         _httpClient = httpClient;
     }
 
-    public async Task<IEnumerable<CourseSummary>?> GetCoursesAsync()
+    public async Task<IEnumerable<Course>?> GetCoursesAsync()
     {
         var response = await _httpClient
-            .GetFromJsonAsync<IEnumerable<CourseSummary>>("courses")
+            .GetFromJsonAsync<IEnumerable<Course>>("courses")
             .ConfigureAwait(false);
 
         return response;
@@ -30,11 +30,9 @@ public class CourseService
     }
 }
 
-public class CourseSummary
+public class Course
 {
     public Guid Id { get; set; }
-    public string Title { get; set; }
+    public string Name { get; set; }
     public string Description { get; set; }
-    public string ImageUrl { get; set; }
-    public string Creator { get; set; }
 }

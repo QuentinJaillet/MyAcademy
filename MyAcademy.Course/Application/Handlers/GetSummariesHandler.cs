@@ -5,7 +5,7 @@ using MyAcademy.Course.Infrastructure.Repositories;
 
 namespace MyAcademy.Course.Application.Handlers;
 
-public class GetSummariesHandler : IRequestHandler<GetSummariesQuery, IReadOnlyList<SummaryDto>>
+public class GetSummariesHandler : IRequestHandler<GetSummariesQuery, IEnumerable<Domain.Course>>
 {
     private readonly ILogger<GetSummariesHandler> _logger;
     private readonly ICourseReadOnlyRepository _courseReadOnlyRepository;
@@ -16,19 +16,11 @@ public class GetSummariesHandler : IRequestHandler<GetSummariesQuery, IReadOnlyL
         _courseReadOnlyRepository = courseReadOnlyRepository;
     }
 
-    public async Task<IReadOnlyList<SummaryDto>> Handle(GetSummariesQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Domain.Course>> Handle(GetSummariesQuery request,
+        CancellationToken cancellationToken)
     {
-        var courses = await _courseReadOnlyRepository
+        return await _courseReadOnlyRepository
             .GetFullCourses()
             .ConfigureAwait(false);
-        
-        return courses.Select(course => new SummaryDto
-        {
-            Id = course.Id,
-            Title = course.Title,
-            Description = course.Description,
-            ImageUrl = course.ImageUrl,
-            Creator = course.Creator.FullName
-        }).ToList();
     }
 }

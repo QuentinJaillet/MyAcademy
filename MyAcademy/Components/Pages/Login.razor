@@ -11,25 +11,24 @@
 }
 
 <EditForm Model="loginModel" OnSubmit="HandleLogin" FormName="loginForm">
-    <DataAnnotationsValidator />
-    
+    <DataAnnotationsValidator/>
+
     <div>
         <label>Email</label>
-        <InputText @bind-Value="loginModel.Email" />
+        <InputText @bind-Value="loginModel.Email"/>
     </div>
 
     <div>
         <label>Mot de passe</label>
-        <InputText type="password" @bind-Value="loginModel.Password" />
+        <InputText type="password" @bind-Value="loginModel.Password"/>
     </div>
 
     <button type="submit">Se connecter</button>
 </EditForm>
 
 @code {
-    [SupplyParameterFromForm]
-    private LoginModel? loginModel { get; set; } = new LoginModel();
-    
+    [SupplyParameterFromForm] private LoginModel? loginModel { get; set; } = new LoginModel();
+
     private string? errorMessage;
 
     private async Task HandleLogin()
@@ -46,4 +45,5 @@
         public string Email { get; set; } = "";
         public string Password { get; set; } = "";
     }
+
 }

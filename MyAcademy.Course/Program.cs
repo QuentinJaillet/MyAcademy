@@ -46,12 +46,12 @@ app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.MapGet("/summaries", async (IMediator mediator) =>
+app.MapGet("/courses", async (IMediator mediator) =>
 {
     var query = new GetSummariesQuery();
     var response = await mediator.Send(query);
-    return Results.Ok(response);
-}).WithName("Summaries").AllowAnonymous();
+    return Results.Ok(response.ToModel());
+}).WithName("Courses").AllowAnonymous();
 
 app.MapGet("/courses/{id}", async (IMediator mediator, Guid id) =>
     {
