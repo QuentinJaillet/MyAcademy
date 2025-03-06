@@ -1,0 +1,17 @@
+@using MyAcademy.Services
+@inject AuthService AuthService
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<button @onclick="async () => await Logout2()" class="btn">Se déconnecter</button>
+
+@code {
+
+    private async Task Logout2()
+    {
+        Console.Write("Logout");
+        await AuthService.Logout();
+        Navigation.NavigateTo("/");
+    }
+
+}

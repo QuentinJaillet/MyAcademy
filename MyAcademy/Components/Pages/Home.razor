@@ -1,11 +1,7 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 
 @code {
-
-    private void Callback1()
-    {
-        throw new NotImplementedException();
-    }
 
     private void Callback2()
     {
@@ -17,7 +13,7 @@
 <PageTitle>Home</PageTitle>
 
 <div style="display: flex; justify-content: flex-start; flex-direction: row">
-    <div class="card">
+    <div class="card p-2">
         <label>Search</label>
         <input type="text" @bind="SearchTerm" @bind:event="oninput" placeholder="Rechercher..." class="form-control"/>
         <br/>
@@ -45,12 +41,7 @@
 
         @foreach (var course in Summaries)
         {
-            <p>@course.Name</p>
-            <p>@course.Description</p>
+            <CourseSummaryCard Course="course"/>
         }
     </div>
 </div>
-
-
-
-

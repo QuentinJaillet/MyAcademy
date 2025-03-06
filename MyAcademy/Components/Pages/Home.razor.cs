@@ -14,7 +14,7 @@ public partial class Home
     public IEnumerable<Course> Summaries { get; set; } = [];
     public Dictionary<Models.Category, bool> CategoriesSelected { get; set; } = new Dictionary<Models.Category, bool>();
     public string SearchTerm { get; set; }
-
+    
     protected override async Task OnInitializedAsync()
     {
         try

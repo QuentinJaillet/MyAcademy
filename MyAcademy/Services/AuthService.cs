@@ -27,7 +27,7 @@ public class AuthService
 
     public async Task Logout()
     {
-        await _httpClient.PostAsync("https://localhost:7084/logout", null);
+        await _httpClient.PostAsync("/logout", null);
         _authStateProvider.NotifyUserLogout();
     }
 }

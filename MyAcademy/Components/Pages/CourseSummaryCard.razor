@@ -1,0 +1,12 @@
+@using MyAcademy.Services
+
+<div class="card p-2">
+    <p>@Course.Name</p>
+    <p>@Course.Description</p>
+    <a href="/course/@Course.Id">Open</a>
+</div>
+
+@code {
+
+    [Parameter] public Course Course { get; set; }
+}
