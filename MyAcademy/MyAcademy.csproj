@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Components\Pages\Home\" />
+      <Folder Include="Components\Pages\Home\Models\" />
     </ItemGroup>
 
 </Project>
