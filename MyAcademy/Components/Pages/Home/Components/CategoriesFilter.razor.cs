@@ -7,20 +7,19 @@ public partial class CategoriesFilter
 {
     [Parameter]
     public IEnumerable<Category>? Categories { get; set; }
-    
-    private IDictionary<Models.Category, bool> CategoriesSelected { get; set; } = new Dictionary<Models.Category, bool>();
-    
-    protected override void OnParametersSet()
+
+    [Parameter]
+    public EventCallback<List<Category>> OnSelectionChanged { get; set; }
+
+    private List<Category> _selectedCategories = [];
+
+    private async Task HandleCheckboxChange(Category category)
     {
-        if (Categories != null) 
-            CategoriesSelected = Categories.ToDictionary(category => category, _ => false);
-    }
-    
-    private void CheckboxChanged(ChangeEventArgs e)
-    {
-        // get the checkbox state
-        var value = e.Value;
-        Console.WriteLine($"Checkbox changed {value}");
-        Console.WriteLine(e);
+        if (!_selectedCategories.Remove(category))
+            _selectedCategories.Add(category);
+
+        await OnSelectionChanged
+            .InvokeAsync(_selectedCategories)
+            .ConfigureAwait(false);
     }
 }

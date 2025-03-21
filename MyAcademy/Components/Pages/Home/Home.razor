@@ -1,12 +1,13 @@
 ﻿@page "/"
 @using MyAcademy.Components.Pages.Home.Components
-@using MyAcademy.Models
 @rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
 
 <div style="display: flex; justify-content: flex-start; flex-direction: row">
-    <CategoriesFilter Categories="Categories"/>
+    <CategoriesFilter
+        Categories="Categories"
+        OnSelectionChanged="HandleSelectionChanged"/>
     <div>
         @if (!string.IsNullOrEmpty(ErrorMessage))
         {

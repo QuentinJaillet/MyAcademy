@@ -22,15 +22,7 @@ public partial class Home
     {
         try
         {
-            //Categories = await CourseService.GetCategoriesAsync().ConfigureAwait(false);
-
-            Categories = new List<Category>()
-            {
-                new Category(Guid.NewGuid(), "Développement"),
-                new Category(Guid.NewGuid(), "Design"),
-                new Category(Guid.NewGuid(), "Marketing"),
-                new Category(Guid.NewGuid(), "Business"),
-            };
+            Categories = await CourseService.GetCategoriesAsync().ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -72,14 +64,20 @@ public partial class Home
         return Task.CompletedTask;
     }
 
-    private void Filter() 
+    private void Filter()
     {
-        // Récupérère les catégories sélectionnées
+        // Récupérère les catégories sélectionnéesz
         /*var selectedCategories = CategoriesSelected
             .Where(x => x.Value)
             .Select(x => x.Key)
             .ToList();*/
 
         //Console.WriteLine($"Selected categories: {string.Join(", ", selectedCategories.Select(x => x.Name))}");
+    }
+
+    private void HandleSelectionChanged(List<Category> selectedCategories)
+    {
+        // Affiche les sélection dans la console
+        Console.WriteLine($"Selected categories: {string.Join(", ", selectedCategories.Select(x => x.Name))}");
     }
 }

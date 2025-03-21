@@ -1,21 +1,30 @@
 ﻿@rendermode InteractiveServer
 
 <div class="card p-2">
-    <!--<label>Search</label>
-    <input type="text" @bind="SearchTerm" @bind:event="oninput" placeholder="Rechercher..." class="form-control"/>
-    <br/>-->
     <p>Categories</p>
-    @foreach (var category in CategoriesSelected)
+    @if (Categories is not null)
     {
-        <div class="form-check">
-            <input class="form-check-input" checked="@category.Value" type="checkbox" value=""
-                   id="cat-@category.Key.Name.ToLower()" @oninput="CheckboxChanged"/>
-            <label class="form-check-label" for="cat-@category.Key.Name.ToLower()">
-                @category.Key.Name
-            </label>
-        </div>
+        if (!Categories.Any())
+        {
+            <p>No categories found.</p>
+        }
+        else
+        {
+            foreach (var category in Categories)
+            {
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox"
+                           id="cat-@category.Name.ToLower()" @onchange="() => HandleCheckboxChange(category)"/>
+                    <label class="form-check-label" for="cat-@category.Name.ToLower()">
+                        @category.Name
+                    </label>
+                </div>
+            }
+        }
+    }
+    else
+    {
+        <p>Loading...</p>
     }
     <br/>
-    <p>Langues</p>
-    <p>toto</p>
 </div>
