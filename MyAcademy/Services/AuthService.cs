@@ -5,7 +5,7 @@ public class AuthService
     private readonly HttpClient _httpClient;
     private readonly CustomAuthStateProvider _authStateProvider;
 
-    public AuthService(HttpClient httpClient ,CustomAuthStateProvider authStateProvider)
+    public AuthService(HttpClient httpClient, CustomAuthStateProvider authStateProvider)
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         _authStateProvider = authStateProvider ?? throw new ArgumentNullException(nameof(authStateProvider));
@@ -18,10 +18,10 @@ public class AuthService
         if (!response.IsSuccessStatusCode)
             return false;
 
-       var user = await _httpClient.GetFromJsonAsync<UserInfoResponse>("/me");
+        var user = await _httpClient.GetFromJsonAsync<UserInfoResponse>("/me");
 
         await _authStateProvider.NotifyUserAuthentication(user);
-        
+
         return true;
     }
 
@@ -29,6 +29,13 @@ public class AuthService
     {
         await _httpClient.PostAsync("/logout", null);
         _authStateProvider.NotifyUserLogout();
+    }
+
+    public async Task<bool> Register(string email, string password)
+    {
+        var response = await _httpClient.PostAsJsonAsync("/register", new { email, password });
+
+        return response.IsSuccessStatusCode;
     }
 }
 

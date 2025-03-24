@@ -73,6 +73,8 @@ app.UseSwaggerUI();
 
 app.MapPost("/login", async (IMediator mediator, Login login) =>
 {
+    app.Logger.LogInformation("Login request received");
+
     var command = new LoginCommand(login.Email, login.Password);
     var response = await mediator.Send(command);
     return Results.Ok(new LoginResponse(response.Token, response.UserId));
@@ -80,6 +82,8 @@ app.MapPost("/login", async (IMediator mediator, Login login) =>
 
 app.MapPost("/register", async (IMediator mediator, Register register) =>
 {
+    app.Logger.LogInformation("Register request received");
+
     var command = new RegisterCommand(register.Email, register.Password);
     var response = await mediator.Send(command);
     return response ? Results.NoContent() : Results.BadRequest();
@@ -87,6 +91,8 @@ app.MapPost("/register", async (IMediator mediator, Register register) =>
 
 app.MapGet("/me", async (IMediator mediator) =>
 {
+    app.Logger.LogInformation("Get me");
+
     var query = new MeQuery();
     var response = await mediator.Send(query);
     return Results.Ok(new UserInfoResponse(response.Id, response.Email, "User"));
@@ -94,6 +100,8 @@ app.MapGet("/me", async (IMediator mediator) =>
 
 app.MapPost("/logout", async (IMediator mediator) =>
 {
+    app.Logger.LogInformation("Logout request received");
+
     var command = new LogoutCommand();
     await mediator.Send(command);
     return Results.Ok();

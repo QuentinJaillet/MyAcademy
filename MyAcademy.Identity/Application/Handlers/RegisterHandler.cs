@@ -19,15 +19,15 @@ public class RegisterHandler : IRequestHandler<RegisterCommand, bool>
     public async Task<bool> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Registering user with email {Email}", request.Email);
-        
+
         var user = new User
         {
-            UserName = request.Email, 
+            UserName = request.Email,
             Email = request.Email
         };
-        
+
         var result = await _userManager.CreateAsync(user, request.Password);
-        
+
         _logger.LogInformation("User with email {Email} registered", request.Email);
 
         return result.Succeeded;
