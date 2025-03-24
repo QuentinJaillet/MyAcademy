@@ -3,32 +3,43 @@
 @inject AuthService AuthService
 @inject NavigationManager Navigation
 
-<h3>Connexion</h3>
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="card shadow-lg border-0 p-4" style="max-width: 400px; width: 100%;">
+        <h3 class="text-center fw-bold text-primary">🔑 Login</h3>
 
-@if (!string.IsNullOrEmpty(errorMessage))
-{
-    <p class="text-danger">@errorMessage</p>
-}
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger text-center">
+                @errorMessage
+            </div>
+        }
 
-<EditForm Model="loginModel" OnSubmit="HandleLogin" FormName="loginForm">
-    <DataAnnotationsValidator/>
+        <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+            <DataAnnotationsValidator />
 
-    <div>
-        <label>Email</label>
-        <InputText @bind-Value="loginModel.Email"/>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">📧 Email</label>
+                <InputText class="form-control" type="email" @bind-Value="loginModel.Email" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">🔒 Password</label>
+                <InputText class="form-control" type="password" @bind-Value="loginModel.Password" />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                🚀 Login
+            </button>
+
+            <div class="text-center mt-3">
+                <small>New here? <a href="/register" class="text-decoration-none">Create an account</a></small>
+            </div>
+        </EditForm>
     </div>
-
-    <div>
-        <label>Mot de passe</label>
-        <InputText type="password" @bind-Value="loginModel.Password"/>
-    </div>
-
-    <button type="submit">Se connecter</button>
-</EditForm>
+</div>
 
 @code {
-    [SupplyParameterFromForm] private LoginModel? loginModel { get; set; } = new LoginModel();
-
+    private LoginModel loginModel { get; set; } = new LoginModel();
     private string? errorMessage;
 
     private async Task HandleLogin()
@@ -37,7 +48,7 @@
         if (success)
             Navigation.NavigateTo("/");
         else
-            errorMessage = "Email ou mot de passe incorrect.";
+            errorMessage = "❌ Incorrect email or password.";
     }
 
     private class LoginModel
@@ -45,5 +56,4 @@
         public string Email { get; set; } = "";
         public string Password { get; set; } = "";
     }
-
 }
