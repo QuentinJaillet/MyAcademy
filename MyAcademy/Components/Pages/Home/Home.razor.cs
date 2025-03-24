@@ -32,16 +32,107 @@ public partial class Home
 
         try
         {
-            var summaries = await CourseService.GetCoursesAsync();
+            //var summaries = await CourseService.GetCoursesAsync();
+            Summaries = new List<Course>
+            {
+                new Course
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "Lorem ipsum dolor sit amet",
+                    Author = "Quentin Jaillet",
+                    Duration = "12h",
+                    Price = 100,
+                    Description =
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra ac justo semper varius. Aliquam pharetra dolor eget euismod pulvinar. In a vehicula quam. Donec et volutpat orci. Aliquam id enim tortor. Proin pulvinar convallis lorem id accumsan. Duis justo felis, semper quis sem sed, varius fermentum arcu.",
+                    //Category = new Category { Id = 1, Name = "Catégorie 1" }
+                },
+                new Course
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "Lorem ipsum dolor sit amet",
+                    Author = "Quentin Jaillet",
+                    Duration = "12h",
+                    Price = 130,
+                    Description =
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra ac justo semper varius. Aliquam pharetra dolor eget euismod pulvinar. In a vehicula quam. Donec et volutpat orci. Aliquam id enim tortor. Proin pulvinar convallis lorem id accumsan. Duis justo felis, semper quis sem sed, varius fermentum arcu.",
+                    //Category = new Category { Id = 1, Name = "Catégorie 1" }
+                },
+                new Course
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "Lorem ipsum dolor sit amet",
+                    Author = "Quentin Jaillet",
+                    Duration = "12h",
+                    Price = 130,
+                    Description =
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra ac justo semper varius. Aliquam pharetra dolor eget euismod pulvinar. In a vehicula quam. Donec et volutpat orci. Aliquam id enim tortor. Proin pulvinar convallis lorem id accumsan. Duis justo felis, semper quis sem sed, varius fermentum arcu.",
+                    //Category = new Category { Id = 1, Name = "Catégorie 1" }
+                },
+                new Course
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "Lorem ipsum dolor sit amet",
+                    Author = "Quentin Jaillet",
+                    Duration = "12h",
+                    Price = 130,
+                    Description =
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra ac justo semper varius. Aliquam pharetra dolor eget euismod pulvinar. In a vehicula quam. Donec et volutpat orci. Aliquam id enim tortor. Proin pulvinar convallis lorem id accumsan. Duis justo felis, semper quis sem sed, varius fermentum arcu.",
+                    //Category = new Category { Id = 1, Name = "Catégorie 1" }
+                },
+                new Course
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "Lorem ipsum dolor sit amet",
+                    Author = "Quentin Jaillet",
+                    Duration = "12h",
+                    Price = 130,
+                    Description =
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra ac justo semper varius. Aliquam pharetra dolor eget euismod pulvinar. In a vehicula quam. Donec et volutpat orci. Aliquam id enim tortor. Proin pulvinar convallis lorem id accumsan. Duis justo felis, semper quis sem sed, varius fermentum arcu.",
+                    //Category = new Category { Id = 1, Name = "Catégorie 1" }
+                },
+                new Course
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "Lorem ipsum dolor sit amet",
+                    Author = "Quentin Jaillet",
+                    Duration = "12h",
+                    Price = 130,
+                    Description =
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra ac justo semper varius. Aliquam pharetra dolor eget euismod pulvinar. In a vehicula quam. Donec et volutpat orci. Aliquam id enim tortor. Proin pulvinar convallis lorem id accumsan. Duis justo felis, semper quis sem sed, varius fermentum arcu.",
+                    //Category = new Category { Id = 1, Name = "Catégorie 1" }
+                },
+                new Course
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "Lorem ipsum dolor sit amet",
+                    Author = "Quentin Jaillet",
+                    Duration = "12h",
+                    Price = 130,
+                    Description =
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra ac justo semper varius. Aliquam pharetra dolor eget euismod pulvinar. In a vehicula quam. Donec et volutpat orci. Aliquam id enim tortor. Proin pulvinar convallis lorem id accumsan. Duis justo felis, semper quis sem sed, varius fermentum arcu.",
+                    //Category = new Category { Id = 1, Name = "Catégorie 1" }
+                },
+                new Course
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "Lorem ipsum dolor sit amet",
+                    Author = "Quentin Jaillet",
+                    Duration = "12h",
+                    Price = 130,
+                    Description =
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra ac justo semper varius. Aliquam pharetra dolor eget euismod pulvinar. In a vehicula quam. Donec et volutpat orci. Aliquam id enim tortor. Proin pulvinar convallis lorem id accumsan. Duis justo felis, semper quis sem sed, varius fermentum arcu.",
+                    //Category = new Category { Id = 1, Name = "Catégorie 1" }
+                },
+            };
 
-            if (summaries is not null)
+            /*if (summaries is not null)
             {
                 Summaries = summaries;
             }
             else
             {
                 ErrorMessage = "Aucun cours n'a été trouvé.";
-            }
+            }*/
         }
         catch (Exception e)
         {
