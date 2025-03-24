@@ -9,6 +9,7 @@ using MyAcademy.Identity.Application.Queries;
 using MyAcademy.Identity.Domain;
 using MyAcademy.Identity.Infrastructure;
 using MyAcademy.Identity.Infrastructure.Entities;
+using MyAcademy.Identity.Infrastructure.Persistance;
 using MyAcademy.Identity.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -56,6 +57,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     db.Database.EnsureCreated(); // Crée la DB si elle n'existe pas
+    await IdentitySeedData.SeedAsync(scope.ServiceProvider);
 }
 
 // Configure the HTTP request pipeline.

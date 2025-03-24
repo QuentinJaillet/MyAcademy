@@ -3,24 +3,24 @@
 <div class="container d-flex justify-content-center align-items-center">
     <div class="card shadow-lg border-0 p-4" style="max-width: 400px; width: 100%;">
         <h3 class="text-center fw-bold text-primary">Create an Account</h3>
-        
-        <EditForm Model="Model" OnValidSubmit="Submit">
-            <DataAnnotationsValidator />
-            <ValidationSummary class="alert alert-danger" />
+
+        <EditForm Model="Model" OnValidSubmit="Submit" FormName="registerForm">
+            <DataAnnotationsValidator/>
+            <ValidationSummary class="alert alert-danger"/>
 
             <div class="mb-3">
                 <label class="form-label fw-semibold">📧 Email</label>
-                <InputText class="form-control" type="email" @bind-Value="Model!.Email" />
+                <InputText class="form-control" type="email" @bind-Value="Model!.Email"/>
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-semibold">🔑 Password</label>
-                <InputText class="form-control" type="password" @bind-Value="Model!.Password" />
+                <InputText class="form-control" type="password" @bind-Value="Model!.Password"/>
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-semibold">🔄 Confirm Password</label>
-                <InputText class="form-control" type="password" @bind-Value="Model!.ConfirmPassword" />
+                <InputText class="form-control" type="password" @bind-Value="Model!.ConfirmPassword"/>
             </div>
 
             <button type="submit" class="btn btn-primary w-100">

@@ -14,17 +14,17 @@
             </div>
         }
 
-        <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
-            <DataAnnotationsValidator />
+        <EditForm Model="loginModel" OnValidSubmit="HandleLogin" Formname="loginForm">
+            <DataAnnotationsValidator/>
 
             <div class="mb-3">
                 <label class="form-label fw-semibold">📧 Email</label>
-                <InputText class="form-control" type="email" @bind-Value="loginModel.Email" />
+                <InputText class="form-control" type="email" @bind-Value="loginModel.Email"/>
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-semibold">🔒 Password</label>
-                <InputText class="form-control" type="password" @bind-Value="loginModel.Password" />
+                <InputText class="form-control" type="password" @bind-Value="loginModel.Password"/>
             </div>
 
             <button type="submit" class="btn btn-primary w-100">
@@ -39,7 +39,10 @@
 </div>
 
 @code {
+
+    [SupplyParameterFromForm]
     private LoginModel loginModel { get; set; } = new LoginModel();
+
     private string? errorMessage;
 
     private async Task HandleLogin()
@@ -56,4 +59,5 @@
         public string Email { get; set; } = "";
         public string Password { get; set; } = "";
     }
+
 }
