@@ -1,0 +1,53 @@
+﻿@page "/basket"
+@using MyAcademy.Models
+@rendermode InteractiveServer
+
+<div class="basket-title">
+    <h1>Mon panier</h1>
+</div>
+<div class="d-flex flex-row justify-content-between gap-2">
+    <div class="basket-content">
+        <div class="basket-items">
+            @foreach (var item in BasketItems)
+            {
+                <BasketItemComponent Item="item" OnRemove="Callback"/>
+            }
+        </div>
+        <div>
+            <button type="button" class="btn btn-danger" @onclick="OnEmptyBasketCallBack">Empty basket</button>
+        </div>
+    </div>
+    <div id="basket-total">
+        <div class="card">
+            <h3>Total : 1500€</h3>
+            <button type="button" class="btn btn-success">Payment</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<BasketItem> BasketItems { get; private set; } = [];
+
+    protected override void OnInitialized()
+    {
+        BasketItems.Add(new BasketItem(Guid.NewGuid(),"Cours de mathématiques", 500, "https://via.placeholder.com/150"));
+        BasketItems.Add(new BasketItem(Guid.NewGuid(),"Cours de mathématiques", 500, "https://via.placeholder.com/150"));
+        BasketItems.Add(new BasketItem(Guid.NewGuid(),"Cours de mathématiques", 500, "https://via.placeholder.com/150"));
+        BasketItems.Add(new BasketItem(Guid.NewGuid(),"Cours de mathématiques", 500, "https://via.placeholder.com/150"));
+    }
+
+    private void Callback(BasketItem basketItem)
+    {
+        Console.WriteLine("Remove " + basketItem.Title);
+        // Doit appeler l'api pour supprimer l'item du panier
+        BasketItems.Remove(basketItem);
+    }
+
+    private void OnEmptyBasketCallBack()
+    {
+        // Doit appeler l'api pour supprimer le contenu du panier
+        BasketItems.Clear();
+    }
+
+}
+
