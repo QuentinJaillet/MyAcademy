@@ -19,6 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Components\Pages\Basket\Models\" />
       <Folder Include="Components\Pages\Home\Models\" />
     </ItemGroup>
 
